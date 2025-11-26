@@ -1,11 +1,11 @@
 "use client";
 
-// import { Search, Bell, Home, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 
 export default function Header() {
     return (
-        <header className="w-full bg-gray-50 px-6 py-3 flex items-center justify-between sticky top-0 z-40 border-b">
+        <header className="w-full bg-gray-50 px-8 py-3 flex items-center justify-between sticky top-0 z-10 shadow">
 
             <div className="flex items-center gap-2 text-gray-700">
                 <span className="font-medium">Home</span>
@@ -13,34 +13,40 @@ export default function Header() {
             </div>
 
             <div className="hidden md:flex items-center gap-6">
-                <div className="bg-white shadow-md px-4 py-2 rounded-full flex items-center gap-3 w-72">
-                    <input
-                        type="text"
-                        placeholder="Search anything"
-                        className="outline-none w-full bg-transparent text-gray-700"
-                    />
-                    {/* <Search size={20} className="text-gray-600" /> */}
-                </div>
+                <Popover className="relative">
+                    <PopoverButton className="outline-none">
+                        <div className="bg-black/8 px-4 py-1.5 rounded-lg flex justify-center items-center gap-2 cursor-pointer transition hover:bg-black/15">
+                            <div className="relative">
+                                <Image
+                                    src="/user.svg"
+                                    alt="profile"   
+                                    width={32}
+                                    height={32}
+                                    className="rounded-full"
+                                />
+                                <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-white"></span>
+                            </div>
 
-                <div className="bg-white shadow-md px-5 py-2 rounded-full flex items-center gap-2">
-                    <span className="text-gray-600">You have</span>
-                    <span className="text-green-600 font-semibold">21</span>
-                    <span className="text-gray-600">new leads</span>
-                    {/* <Bell size={20} className="text-yellow-500" /> */}
-                </div>
+                            <div className="text-left">
+                                <span className="text-sm font-medium text-gray-800">Implementador</span>
+                                <p className="text-xs text-gray-500">En línea</p>
+                            </div>
+                        </div>
+                    </PopoverButton>
 
-                <Image src="/uk.png" alt="Language" width={32} height={32} className="rounded-full" />
+                    <PopoverPanel
+                        anchor="bottom"
+                        className="flex flex-col bg-white p-2 w-44 mt-2 rounded-xl shadow-lg border border-gray-100 animate-fadeIn z-20"
+                    >
+                        <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition text-sm">
+                            Cambiar contraseña
+                        </button>
+                        <button className="text-left px-3 py-2 rounded-lg hover:bg-red-100 text-red-600 transition text-sm">
+                            Cerrar sesión
+                        </button>
+                    </PopoverPanel>
+                </Popover>
 
-                <div className="relative">
-                    <Image
-                        src="/avatar.png"
-                        alt="profile"
-                        width={40}
-                        height={40}
-                        className="rounded-full"
-                    />
-                    <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-white"></span>
-                </div>
             </div>
         </header>
     );

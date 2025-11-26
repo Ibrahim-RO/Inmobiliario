@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form"
 import ErrorMessage from "../ui/ErrorMessage"
+import { User } from "@/src/schemas/auth"
 
 export default function Login() {
 
@@ -10,10 +11,10 @@ export default function Login() {
         password: ""
     }
 
-    const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: initialValues})
+    const { register, handleSubmit, formState: { errors } } = useForm<User>({defaultValues: initialValues})
 
-    const handleLogin = () => {
-        alert("login")
+    const handleLogin = (formData: User) => {
+        console.log(formData)
     }
 
     return (
@@ -28,7 +29,7 @@ export default function Login() {
                 <input
                     type="text"
                     placeholder="Ingresa tu usuario"
-                    className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-900"
+                    className={`w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none ${errors.username && 'border-red-600'}`}
                     {...register("username", {
                         required: "El usuario es obligatorio"
                     })}
@@ -43,7 +44,7 @@ export default function Login() {
                 <input
                     type="password"
                     placeholder="Ingresa tu contraseña"
-                    className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-900"
+                    className={`w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none ${errors.username && 'border-red-600'}`}
                     {...register("password", {
                         required: "La contraseña es obligatoria"
                     })}
