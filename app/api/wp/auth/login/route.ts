@@ -17,7 +17,7 @@ export async function POST(req: Request) {
         const data = await wpRes.json();
 
         if (!wpRes.ok) {
-            return Response.json({ error: data.message || "Credenciales inválidas" }, { status: 401 });
+            return Response.json({ error: "Credenciales inválidas" }, { status: 401 });
         }
 
         (await cookies()).set("INMOBILIARIO_TOKEN", data.token, {
