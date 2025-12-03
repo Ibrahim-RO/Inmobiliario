@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -13,6 +12,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Edit3, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import AddVidModal from "@/components/vid/AddVidModal";
 
 type Inmueble = {
   id: number;
@@ -78,108 +78,101 @@ export default function LotesVid() {
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <CardTitle>Inmuebles</CardTitle>
-          <p className="text-sm text-muted-foreground">Listado de propiedades</p>
-        </div>
+    <section className="space-y-5">
+      <div className="text-right"> 
+        <AddVidModal />
+      </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto">
-          <Input
-            placeholder="Buscar por nombre, tipo, estado o precio..."
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setPage(1);
-            }}
-          />
-          <Button onClick={() => { setQuery(""); setPage(1); }}>Limpiar</Button>
-        </div>
-      </CardHeader>
+      <Card className="w-full">
+        <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <CardTitle className="font-semibold">LOTES FRACC LA VID RESIDENCIAL CUAUTLANCINGO</CardTitle>
+            <p className="text-sm text-muted-foreground">Listado de propiedades</p>
+          </div>
+        </CardHeader>
 
-      <CardContent>
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="cursor-pointer" onClick={() => toggleSort("nombre")}>Nombre</TableHead>
-                <TableHead className="cursor-pointer" onClick={() => toggleSort("tipo")}>Tipo</TableHead>
-                <TableHead className="cursor-pointer" onClick={() => toggleSort("precio")}>Precio</TableHead>
-                <TableHead>Estado</TableHead>
-                <TableHead>Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {paginated.length === 0 ? (
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-sm text-muted-foreground">
-                    No se encontraron resultados
-                  </TableCell>
+                  <TableHead className="cursor-pointer" onClick={() => toggleSort("nombre")}>Nombre</TableHead>
+                  <TableHead className="cursor-pointer" onClick={() => toggleSort("tipo")}>Tipo</TableHead>
+                  <TableHead className="cursor-pointer" onClick={() => toggleSort("precio")}>Precio</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Acciones</TableHead>
                 </TableRow>
-              ) : (
-                paginated.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.nombre}</TableCell>
-                    <TableCell>{item.tipo}</TableCell>
-                    <TableCell>${item.precio.toLocaleString()}</TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        item.estado === "Disponible"
-                          ? "bg-green-100 text-green-800"
-                          : item.estado === "Reservado"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
-                      }`}>{item.estado}</span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0" aria-label="Editar">
-                          <Edit3 className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0" aria-label="Eliminar">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+              </TableHeader>
+
+              <TableBody>
+                {paginated.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-8 text-sm text-muted-foreground">
+                      No se encontraron resultados
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Pagination */}
-        <div className="mt-4 flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Mostrando <span className="font-medium">{(page - 1) * perPage + (paginated.length ? 1 : 0)}</span> - <span className="font-medium">{(page - 1) * perPage + paginated.length}</span> de <span className="font-medium">{total}</span>
-          </p>
-
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setPage(Math.max(1, page - 1))} disabled={page === 1}>
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-
-            <div className="flex items-center gap-1">
-              {Array.from({ length: pages }).map((_, i) => (
-                <Button
-                  key={i}
-                  size="sm"
-                  variant={page === i + 1 ? "default" : "ghost"}
-                  onClick={() => setPage(i + 1)}
-                >
-                  {i + 1}
-                </Button>
-              ))}
-            </div>
-
-            <Button variant="ghost" size="sm" onClick={() => setPage(Math.min(pages, page + 1))} disabled={page === pages}>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+                ) : (
+                  paginated.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>{item.nombre}</TableCell>
+                      <TableCell>{item.tipo}</TableCell>
+                      <TableCell>${item.precio.toLocaleString()}</TableCell>
+                      <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${item.estado === "Disponible"
+                            ? "bg-green-100 text-green-800"
+                            : item.estado === "Reservado"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                          }`}>{item.estado}</span>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0" aria-label="Editar">
+                            <Edit3 className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0" aria-label="Eliminar">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+
+          {/* Pagination */}
+          <div className="mt-4 flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">
+              Mostrando <span className="font-medium">{(page - 1) * perPage + (paginated.length ? 1 : 0)}</span> - <span className="font-medium">{(page - 1) * perPage + paginated.length}</span> de <span className="font-medium">{total}</span>
+            </p>
+
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setPage(Math.max(1, page - 1))} disabled={page === 1}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+
+              <div className="flex items-center gap-1">
+                {Array.from({ length: pages }).map((_, i) => (
+                  <Button
+                    key={i}
+                    size="sm"
+                    variant={page === i + 1 ? "default" : "ghost"}
+                    onClick={() => setPage(i + 1)}
+                  >
+                    {i + 1}
+                  </Button>
+                ))}
+              </div>
+
+              <Button variant="ghost" size="sm" onClick={() => setPage(Math.min(pages, page + 1))} disabled={page === pages}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
   );
 }

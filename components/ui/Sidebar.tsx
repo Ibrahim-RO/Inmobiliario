@@ -29,56 +29,90 @@ const menu = [
     { name: "Lotes Boutique Zerezotla", icon: SparklesIcon, url: "/lotes-zerezotla" },
 ];
 
-export default function Sidebar({ children }: { children: React.ReactNode }) {
-    const pathname = usePathname()
-    const base = "/admin"
+export default function Sidebar({ children } : { children: React.ReactNode }) {
+    const base = "/admin";
     const [open, setOpen] = useState(true);
+    const [mobileOpen, setMobileOpen] = useState(false);
+
+    const pathname = usePathname()
+    const url = pathname.split("/")[2]
 
     return (
         <div className="flex h-screen overflow-hidden">
 
-            <aside className={`h-full bg-white shadow border-r border-gray-200 transition-all duration-300 ${open ? "w-64" : "w-20"} fixed md:static z-50`}>
+            <button
+                onClick={() => setMobileOpen(true)}
+                className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white shadow rounded-lg"
+            >
+                <Bars3Icon className="size-6 text-gray-700" />
+            </button>
+
+            {mobileOpen && (
+                <div
+                    className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+                    onClick={() => setMobileOpen(false)}
+                ></div>
+            )}
+
+            <aside
+                className={`
+                    bg-white shadow border-r border-gray-200 fixed lg:static
+                    h-full z-50 transition-all duration-300
+                    ${open ? "w-64" : "w-20"}
+                    ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+                `}
+            >
                 <div className="flex items-center justify-between p-5">
                     {open && <h1 className="text-xl font-bold text-gray-800">Inmuebles</h1>}
 
                     <button
                         onClick={() => setOpen(!open)}
-                        className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200"
+                        className="hidden lg:block p-2 bg-gray-200 rounded-lg hover:bg-gray-300 cursor-pointer"
                     >
                         <Bars3Icon className="size-6 text-gray-700" />
+                    </button>
+
+                    <button
+                        onClick={() => setMobileOpen(false)}
+                        className="lg:hidden p-2 bg-gray-100 rounded-lg hover:bg-gray-200"
+                    >
+                        ✕
                     </button>
                 </div>
 
                 <nav className="mt-4 space-y-1">
                     {menu.map((item) => {
-                        const href = base + item.url
+                        const href = base + item.url;
 
                         return (
                             <Link
                                 href={href}
                                 key={item.name}
-                                className="relative group flex items-center gap-3 p-3 text-gray-700 hover:bg-gray-100 cursor-pointer transition rounded-lg mx-2"
+                                onClick={() => setMobileOpen(false)}
+                                className={`relative group flex items-center ${!open && "justify-center"} gap-3 p-3 text-gray-700 cursor-pointer transition rounded-lg mx-2
+                                ${item.url === "/" + url ? "bg-yellow-950" : "hover:bg-gray-100"}    
+                                `}
                             >
-                                <item.icon className="size-6 text-yellow-900 shrink-0" />
+                                <item.icon className={`size-6 shrink-0 ${item.url === "/" + url ? "text-white" : "text-yellow-900"} `} />
 
                                 {open && (
-                                    <span className="text-sm font-medium">{item.name}</span>
+                                    <span className={`text-sm font-medium ${item.url === "/" + url && "text-white"}`}>{item.name}</span>
                                 )}
 
                                 {!open && (
                                     <span
-                                        className=" absolute left-full ml-3 px-3 py-1 bg-gray-900 text-white text-xs rounded-lg  opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none z-50"
+                                        className=" absolute left-full ml-3 px-3 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none z-50"
                                     >
                                         {item.name}
                                     </span>
                                 )}
                             </Link>
-                        )
+                        );
                     })}
                 </nav>
             </aside>
 
-            <main className={`flex-1 transition-all duration-300 bg-gray-50 ml-20 md:ml-0`}>
+            <main className={`flex-1 transition-all duration-300 bg-gray-50`}>
                 {children}
             </main>
         </div>

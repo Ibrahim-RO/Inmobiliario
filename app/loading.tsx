@@ -5,7 +5,7 @@ export default function Loading() {
                 <div className="animate-spin h-20 w-20 border-4 border-yellow-900 border-t-transparent rounded-full"></div>
             </div>
             <p className="mt-6 text-lg font-semibold text-yellow-900">
-                Cargando inmuebles…
+                Cargando datos...
             </p>
         </div>
     );
